@@ -146,6 +146,16 @@
       color: #f87171;
     }
 
+    /* 新增：故事图片排版样式 */
+    .story-img {
+      width: 100%;
+      border-radius: 6px;
+      margin: 15px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      display: block;
+      object-fit: cover;
+    }
+
     /* 互动区块 & 静态展示区块 */
     .tech-box {
       background: #1e293b;
@@ -221,6 +231,7 @@
     <div class="timeline-item left">
       <div class="content">
         <h2>2000 - 2021 | 军旅淬火 平凡铸基</h2>
+        <img src="image_20af3f.jpg" alt="金城龙军装照" class="story-img">
         <p>出生于雷锋故乡抚顺。入伍北部战区海军某部，练就坚韧品格。服役期间及退役后，累计无偿献血13次，总计4000毫升。</p>
       </div>
     </div>
@@ -228,6 +239,7 @@
     <div class="timeline-item right">
       <div class="content">
         <h2>2022 - 2025 | 岐黄之志 医者仁心</h2>
+        <img src="image_20ac76.jpg" alt="金城龙器官捐献卡" class="story-img">
         <p>退役复学，就读辽宁中医药大学。他将所学化为行动，多次在列车上利用中医推拿救治突发疾病的旅客，并早早签下器官捐献志愿书。</p>
       </div>
     </div>
@@ -238,7 +250,7 @@
         <p>沈阳浑河冰面，为救落水父子，他义无反顾踏上碎裂的冰层。7岁儿童获救，他却将26岁的青春永远定格在冰河之中。</p>
         <div class="tech-box" style="padding: 30px 20px; background: rgba(0,0,0,0.2); border: none;">
           <p style="font-size: 1.2rem; color: #e2e8f0; font-style: italic; letter-spacing: 2px;">“有情有义有祖国”</p>
-          <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 15px;">这是英雄的抉择，也是生命的重托</p>
+          <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 15px;">— 这是英雄的抉择，也是生命的重托 —</p>
         </div>
       </div>
     </div>
@@ -257,9 +269,6 @@
   </div>
 
   <script>
-    // ==========================================
-    // 1. 时间轴滚动动画 (Intersection Observer)
-    // ==========================================
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -272,9 +281,6 @@
       observer.observe(item);
     });
 
-    // ==========================================
-    // 2. 大数据致敬计数器模拟
-    // ==========================================
     let currentCount = 84592;
     const counterElement = document.getElementById('counter');
 
