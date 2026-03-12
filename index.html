@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>冰河铸魂·数字画卷 | 致敬时代楷模金城龙</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
       --primary-color: #c0392b;
@@ -147,7 +146,7 @@
       color: #f87171;
     }
 
-    /* 互动区块 */
+    /* 互动区块 & 静态展示区块 */
     .tech-box {
       background: #1e293b;
       padding: 20px;
@@ -180,36 +179,6 @@
 
     .btn:hover {
       background-color: #a93226;
-    }
-
-    /* 3D 容器特有样式 */
-    #three-container {
-      padding: 0;
-      height: 350px;
-      position: relative;
-      border: none;
-      overflow: hidden;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
-
-    #three-container canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      outline: none;
-    }
-
-    .three-overlay {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
-      pointer-events: none;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 5px 0;
     }
 
     @media screen and (max-width: 600px) {
@@ -267,9 +236,9 @@
       <div class="content">
         <h2>2026.01.23 | 冰河绝响 英雄抉择</h2>
         <p>沈阳浑河冰面，为救落水父子，他义无反顾踏上碎裂的冰层。7岁儿童获救，他却将26岁的青春永远定格在冰河之中。</p>
-
-        <div id="three-container" class="tech-box">
-          <div class="three-overlay">👆 在区域内滑动手指环视冰河</div>
+        <div class="tech-box" style="padding: 30px 20px; background: rgba(0,0,0,0.2); border: none;">
+          <p style="font-size: 1.2rem; color: #e2e8f0; font-style: italic; letter-spacing: 2px;">“有情有义有祖国”</p>
+          <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 15px;">— 这是英雄的抉择，也是生命的重托 —</p>
         </div>
       </div>
     </div>
@@ -328,136 +297,6 @@
         counterElement.innerText = currentCount.toLocaleString();
       }
     }, 2000);
-
-    // ==========================================
-    // 3. Three.js 3D 冰河场景 (嵌入指定容器)
-    // ==========================================
-    function initThreeJS() {
-      const container = document.getElementById('three-container');
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-
-      const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x0a1e3f, 0.02);
-
-      const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-      camera.position.set(0, 5, 15);
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      container.appendChild(renderer.domElement);
-
-      // 光影
-      const ambientLight = new THREE.AmbientLight(0x406080, 1.5);
-      scene.add(ambientLight);
-
-      const moonLight = new THREE.DirectionalLight(0xcceeff, 1);
-      moonLight.position.set(-10, 20, 10);
-      scene.add(moonLight);
-
-      const heroLight = new THREE.PointLight(0xffaa00, 2, 20);
-      heroLight.position.set(0, -1, 0);
-      scene.add(heroLight);
-
-      // 冰面与水面
-      const iceMat = new THREE.MeshStandardMaterial({ color: 0x88ccff, roughness: 0.2, transparent: true, opacity: 0.6 });
-      const iceGround = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), iceMat);
-      iceGround.rotation.x = -Math.PI / 2;
-      scene.add(iceGround);
-
-      const waterMat = new THREE.MeshBasicMaterial({ color: 0x020813 });
-      const waterGround = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), waterMat);
-      waterGround.rotation.x = -Math.PI / 2;
-      waterGround.position.y = -2;
-      scene.add(waterGround);
-
-      // 破冰块
-      const breakGroup = new THREE.Group();
-      const chunkGeo = new THREE.BoxGeometry(2, 0.5, 2);
-      for (let i = 0; i < 15; i++) {
-        const chunkMat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color().setHSL(0.55, 0.8, Math.random() * 0.3 + 0.5),
-          roughness: 0.1, transparent: true, opacity: 0.8
-        });
-        const chunk = new THREE.Mesh(chunkGeo, chunkMat);
-        const radius = Math.random() * 4;
-        const angle = Math.random() * Math.PI * 2;
-        chunk.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 0.5, Math.sin(angle) * radius);
-        chunk.rotation.set(Math.random() * 0.5, Math.random() * Math.PI, Math.random() * 0.5);
-        breakGroup.add(chunk);
-      }
-      scene.add(breakGroup);
-
-      // 粒子暴风雪
-      const particleCount = 1000;
-      const particlesGeo = new THREE.BufferGeometry();
-      const posArray = new Float32Array(particleCount * 3);
-      for (let i = 0; i < particleCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 40;
-      particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-      const particlesMat = new THREE.PointsMaterial({ size: 0.05, color: 0xffffff, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
-      const snowParticles = new THREE.Points(particlesGeo, particlesMat);
-      scene.add(snowParticles);
-
-      // 交互控制 (相对于容器本身)
-      let mouseX = 0, mouseY = 0;
-
-      container.addEventListener('mousemove', (event) => {
-        const rect = container.getBoundingClientRect();
-        mouseX = (event.clientX - rect.left - rect.width / 2);
-        mouseY = (event.clientY - rect.top - rect.height / 2);
-      });
-
-      container.addEventListener('touchmove', (event) => {
-        if (event.touches.length > 0) {
-          const rect = container.getBoundingClientRect();
-          mouseX = (event.touches[0].clientX - rect.left - rect.width / 2);
-          mouseY = (event.touches[0].clientY - rect.top - rect.height / 2);
-          event.preventDefault(); // 防止滑动 3D 区域时带动页面滚动
-        }
-      }, { passive: false });
-
-      // 动画循环
-      const clock = new THREE.Clock();
-      function animate() {
-        requestAnimationFrame(animate);
-        const time = clock.getElapsedTime();
-
-        // 相机缓动
-        camera.position.x += (mouseX * 0.01 - camera.position.x) * 0.05;
-        camera.position.y += (-mouseY * 0.01 - camera.position.y + 5) * 0.05;
-        camera.lookAt(0, 0, 0);
-
-        breakGroup.position.y = Math.sin(time * 2) * 0.1;
-
-        const positions = snowParticles.geometry.attributes.position.array;
-        for (let i = 1; i < particleCount * 3; i += 3) {
-          positions[i] -= 0.05;
-          positions[i - 1] -= 0.02;
-          if (positions[i] < -2) {
-            positions[i] = 20;
-            positions[i - 1] = (Math.random() - 0.5) * 40;
-          }
-        }
-        snowParticles.geometry.attributes.position.needsUpdate = true;
-        heroLight.intensity = 2 + Math.sin(time * 3) * 0.5;
-
-        renderer.render(scene, camera);
-      }
-      animate();
-
-      // 监听窗口大小变化，动态调整画布尺寸
-      window.addEventListener('resize', () => {
-        const newWidth = container.clientWidth;
-        const newHeight = container.clientHeight;
-        camera.aspect = newWidth / newHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(newWidth, newHeight);
-      });
-    }
-
-    // 页面加载完成后初始化 3D 场景
-    window.onload = initThreeJS;
   </script>
 </body>
 
